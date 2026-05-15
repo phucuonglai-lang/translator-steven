@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Copy, Check, Languages, Loader2 } from 'lucide-react'
 
 function App() {
   const [input, setInput] = useState('')
-  const [results, setResults] = useState<{ english: string, spanish_cuba: string } | null>(null)
+  const [results, setResults] = useState<{ vietnamese: string, english: string, spanish_cuba: string } | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [copiedType, setCopiedType] = useState<string | null>(null)
