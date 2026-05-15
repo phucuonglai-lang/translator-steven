@@ -1,39 +1,50 @@
-// VERSION 2.5.1 - FIXED TS ERRORS
-import { useState } from 'react'
-import { Copy, Check, Languages, Loader2 } from 'lucide-react'
+import { useState } from 'react';
+import { Copy, Check, Languages, Loader2 } from 'lucide-react';
 
 function App() {
-  const [input, setInput] = useState('')
-  const [results, setResults] = useState<{ vietnamese: string, english: string, spanish_cuba: string } | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [copiedType, setCopiedType] = useState<string | null>(null)
+  const [input, setInput] = useState('');
+  const [results, setResults] = useState<{ vietnamese: string; english: string; spanish_cuba: string } | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [copiedType, setCopiedType] = useState<string | null>(null);
 
   const handleTranslate = async () => {
-    if (!input.trim()) return
-    setLoading(true)
-    setError('')
+    if (!input.trim()) return;
+    setLoading(true);
+    setError('');
+    
     try {
-      const response = await fetch('http://localhost:3000/api/translate', {
+      // Đã sửa lỗi localhost: Dùng đường dẫn tương đối cho Vercel (hoặc thay bằng URL API thực tế của bạn)
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api/translate` : '/api/translate';
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: input })
-      })
-      const data = await response.json()
-      if (data.error) throw new Error(data.error)
-      setResults(data)
-    } catch (err: any) {
-      setError(err.message || 'Lỗi kết nối server')
+      });
+      
+      const data = await response.json();
+      
+      if (data.error) throw new Error(data.error);
+      setResults(data);
+      
+    } catch (err: unknown) {
+      // Sửa lỗi TypeScript khắt khe của Vercel
+      if (err instanceof Error) {
+        setError(err.message || 'Lỗi kết nối server');
+      } else {
+        setError('Lỗi kết nối server không xác định');
+      }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const copyToClipboard = (text: string, type: string) => {
-    navigator.clipboard.writeText(text)
-    setCopiedType(type)
-    setTimeout(() => setCopiedType(null), 2000)
-  }
+    navigator.clipboard.writeText(text);
+    setCopiedType(type);
+    setTimeout(() => setCopiedType(null), 2000);
+  };
 
   return (
     <div className="container">
@@ -52,7 +63,7 @@ function App() {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-              handleTranslate()
+              handleTranslate();
             }
           }}
         />
@@ -103,7 +114,7 @@ function App() {
         <p>Phiên bản dành cho người thân • AI Gemini 2.5 Flash Lite</p>
       </footer>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
