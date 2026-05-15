@@ -4,7 +4,7 @@ import { Copy, Check, Languages, Loader2 } from 'lucide-react'
 
 function App() {
   const [input, setInput] = useState('')
-  const [results, setResults] = useState<{ vietnamese: string, english: string, spanish_cuba: string } | null>(null)
+  const [translationResults, setTranslationResults] = useState<{ vietnamese: string, english: string, spanish_cuba: string } | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [copiedType, setCopiedType] = useState<string | null>(null)
@@ -21,7 +21,7 @@ function App() {
       })
       const data = await response.json()
       if (data.error) throw new Error(data.error)
-      setResults(data)
+      setTranslationResults(data)
     } catch (err: any) {
       setError(err.message || 'Lỗi kết nối server')
     } finally {
@@ -71,28 +71,28 @@ function App() {
 
       {error && <p className="error-msg">{error}</p>}
 
-      {results && (
+      {translationResults && (
         <div className="results">
           <div className="result-card">
             <span className="label">Tiếng Việt 🇻🇳</span>
-            <p className="output-text">{results.vietnamese}</p>
-            <button className="copy-btn" onClick={() => copyToClipboard(results.vietnamese, 'vi')}>
+            <p className="output-text">{translationResults.vietnamese}</p>
+            <button className="copy-btn" onClick={() => copyToClipboard(translationResults.vietnamese, 'vi')}>
               {copiedType === 'vi' ? <Check size={24} color="#10b981" /> : <Copy size={24} />}
             </button>
           </div>
 
           <div className="result-card">
             <span className="label">English 🇺🇸</span>
-            <p className="output-text">{results.english}</p>
-            <button className="copy-btn" onClick={() => copyToClipboard(results.english, 'en')}>
+            <p className="output-text">{translationResults.english}</p>
+            <button className="copy-btn" onClick={() => copyToClipboard(translationResults.english, 'en')}>
               {copiedType === 'en' ? <Check size={24} color="#10b981" /> : <Copy size={24} />}
             </button>
           </div>
 
           <div className="result-card">
             <span className="label">Spanish (Cuba 🇨🇺)</span>
-            <p className="output-text">{results.spanish_cuba}</p>
-            <button className="copy-btn" onClick={() => copyToClipboard(results.spanish_cuba, 'es')}>
+            <p className="output-text">{translationResults.spanish_cuba}</p>
+            <button className="copy-btn" onClick={() => copyToClipboard(translationResults.spanish_cuba, 'es')}>
               {copiedType === 'es' ? <Check size={24} color="#10b981" /> : <Copy size={24} />}
             </button>
           </div>
