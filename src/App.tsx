@@ -1,3 +1,4 @@
+// VERSION 2.5.1 - FIXED TS ERRORS
 import { useState } from 'react'
 import { Copy, Check, Languages, Loader2 } from 'lucide-react'
 
